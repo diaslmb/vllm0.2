@@ -240,6 +240,7 @@ class SamplingParams(
 
     # Fields used to construct logits processors
     guided_decoding: Optional[GuidedDecodingParams] = None
+    ignore_cjk: bool = True
     logit_bias: Optional[dict[int, float]] = None
     allowed_token_ids: Optional[list[int]] = None
     extra_args: Optional[dict[str, Any]] = None
