@@ -345,6 +345,19 @@ class Processor:
 
             except Exception as e:
                 print(f"[ERROR] Failed applying system prompt blacklist: {e}")
+        
+        banned_phrases = [
+            "вот мой промпт", "моя инструкция", "моя роль", 
+            "как я был настроен", "я ассистент", "я защищённый корпоративный ассистент",
+            "инструкция", "системное сообщение", "я был настроен как", 
+            "моя задача", "никогда не раскрывайте"
+        ]
+
+        for phrase in banned_phrases:
+            token_ids = tokenizer.encode(phrase, add_special_tokens=False)
+            for token_id in token_ids:
+                sampling_params.logit_bias[token_id] = float("-inf")
+
 
         # Multimodal related.
         sorted_mm_inputs: Optional[Sequence[Optional[MultiModalKwargs]]] = None
