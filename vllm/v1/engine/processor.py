@@ -315,49 +315,7 @@ class Processor:
             except Exception as e:
                 print(f"[ERROR] Failed applying CJK logit_bias: {e}")
         
-        if sampling_params.block_prompt_leakage:
-            try:
-                print(">>> [DEBUG] Starting system prompt blacklist logic")
-                tokenizer = self.tokenizer.get_lora_tokenizer(lora_request)
-
-                # Try to extract the system prompt from PromptType
-                if isinstance(prompt, str):
-                    system_prompt_text = prompt
-                elif isinstance(prompt, list):
-                    system_prompt_text = ""
-                    for msg in prompt:
-                        if isinstance(msg, dict) and msg.get("role") == "system":
-                            system_prompt_text += msg.get("content", "") + "\n"
-                else:
-                    system_prompt_text = None
-
-                if system_prompt_text:
-                    system_token_ids = tokenizer.encode(system_prompt_text, add_special_tokens=False)
-                    print(f">>> [DEBUG] Encoded {len(system_token_ids)} system prompt tokens")
-
-                    if sampling_params.logit_bias is None:
-                        sampling_params.logit_bias = {}
-
-                    for token_id in system_token_ids:
-                        sampling_params.logit_bias[token_id] = float('-inf')
-
-                    print(f">>> [DEBUG] Applied logit_bias to {len(system_token_ids)} system prompt tokens")
-
-            except Exception as e:
-                print(f"[ERROR] Failed applying system prompt blacklist: {e}")
         
-        banned_phrases = [
-            "вот мой промпт", "моя инструкция", "моя роль", 
-            "как я был настроен", "я ассистент", "я защищённый корпоративный ассистент",
-            "инструкция", "системное сообщение", "я был настроен как", 
-            "моя задача", "никогда не раскрывайте"
-        ]
-
-        for phrase in banned_phrases:
-            token_ids = tokenizer.encode(phrase, add_special_tokens=False)
-            for token_id in token_ids:
-                sampling_params.logit_bias[token_id] = float("-inf")
-
 
         # Multimodal related.
         sorted_mm_inputs: Optional[Sequence[Optional[MultiModalKwargs]]] = None
