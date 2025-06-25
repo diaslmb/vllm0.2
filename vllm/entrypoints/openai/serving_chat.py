@@ -223,6 +223,7 @@ class OpenAIServingChat(OpenAIServing):
                         self.model_config.logits_processor_pattern,
                         self.default_sampling_params)
                     sampling_params.ignore_cjk = request.ignore_cjk
+                    sampling_params.block_prompt_leakage = block_prompt_leakage
 
                 self._log_inputs(request_id,
                                  request_prompts[i],
