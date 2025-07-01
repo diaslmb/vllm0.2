@@ -222,7 +222,7 @@ class OpenAIServingChat(OpenAIServing):
                         default_max_tokens,
                         self.model_config.logits_processor_pattern,
                         self.default_sampling_params)
-                    sampling_params.ignore_cjk = request.ignore_cjks
+                    sampling_params.ignore_cjk = request.ignore_cjk
 
                 self._log_inputs(request_id,
                                  request_prompts[i],

@@ -314,8 +314,6 @@ class Processor:
 
             except Exception as e:
                 print(f"[ERROR] Failed applying CJK logit_bias: {e}")
-        
-        
 
         # Multimodal related.
         sorted_mm_inputs: Optional[Sequence[Optional[MultiModalKwargs]]] = None
